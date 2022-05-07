@@ -1,6 +1,6 @@
 ﻿dotnet restore
 dotnet build 
-cd Blog.Core.Api
+#cd Blog.Core.Api
 
 dotnet publish 
 echo "Successfully!!!! ^ please see the file ."
