@@ -5,31 +5,38 @@
 #如果你想先手动dotnet build成可执行的二进制文件，然后再构建镜像，请看.Api层下的dockerfile。
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS base
+#FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS base
+#WORKDIR /app
+#EXPOSE 80
+
+#FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
+#WORKDIR /src
+#COPY ["Blog.Core.Api/Blog.Core.Api.csproj", "Blog.Core.Api/"]
+#COPY ["Blog.Core.Extensions/Blog.Core.Extensions.csproj", "Blog.Core.Extensions/"]
+#COPY ["Blog.Core.Tasks/Blog.Core.Tasks.csproj", "Blog.Core.Tasks/"]
+#COPY ["Blog.Core.IServices/Blog.Core.IServices.csproj", "Blog.Core.IServices/"]
+#COPY ["Blog.Core.Model/Blog.Core.Model.csproj", "Blog.Core.Model/"]
+#COPY ["Blog.Core.Common/Blog.Core.Common.csproj", "Blog.Core.Common/"]
+#COPY ["Blog.Core.Services/Blog.Core.Services.csproj", "Blog.Core.Services/"]
+#COPY ["Blog.Core.Repository/Blog.Core.Repository.csproj", "Blog.Core.Repository/"]
+#COPY ["Blog.Core.EventBus/Blog.Core.EventBus.csproj", "Blog.Core.EventBus/"]
+#RUN dotnet restore "Blog.Core.Api/Blog.Core.Api.csproj"
+#COPY . .
+#WORKDIR "/src/Blog.Core.Api"
+#RUN dotnet build "Blog.Core.Api.csproj" -c Release -o /app/build
+
+#FROM build AS publish
+#RUN dotnet publish "Blog.Core.Api.csproj" -c Release -o /app/publish
+
+#FROM base AS final
+#WORKDIR /app
+#COPY --from=publish /app/publish .
+#EXPOSE 9291 
+#ENTRYPOINT ["dotnet", "Blog.Core.Api.dll"]
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
 WORKDIR /app
-EXPOSE 80
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
-WORKDIR /src
-COPY ["Blog.Core.Api/Blog.Core.Api.csproj", "Blog.Core.Api/"]
-COPY ["Blog.Core.Extensions/Blog.Core.Extensions.csproj", "Blog.Core.Extensions/"]
-COPY ["Blog.Core.Tasks/Blog.Core.Tasks.csproj", "Blog.Core.Tasks/"]
-COPY ["Blog.Core.IServices/Blog.Core.IServices.csproj", "Blog.Core.IServices/"]
-COPY ["Blog.Core.Model/Blog.Core.Model.csproj", "Blog.Core.Model/"]
-COPY ["Blog.Core.Common/Blog.Core.Common.csproj", "Blog.Core.Common/"]
-COPY ["Blog.Core.Services/Blog.Core.Services.csproj", "Blog.Core.Services/"]
-COPY ["Blog.Core.Repository/Blog.Core.Repository.csproj", "Blog.Core.Repository/"]
-COPY ["Blog.Core.EventBus/Blog.Core.EventBus.csproj", "Blog.Core.EventBus/"]
-RUN dotnet restore "Blog.Core.Api/Blog.Core.Api.csproj"
-COPY . .
-WORKDIR "/src/Blog.Core.Api"
-RUN dotnet build "Blog.Core.Api.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Blog.Core.Api.csproj" -c Release -o /app/publish
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+COPY . . 
 EXPOSE 9291 
-ENTRYPOINT ["dotnet", "Blog.Core.Api.dll"]
+ENTRYPOINT ["dotnet", "Blog.Core.Api.dll","-b","0.0.0.0"]
