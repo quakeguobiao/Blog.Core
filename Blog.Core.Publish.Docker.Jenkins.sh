@@ -17,4 +17,5 @@ chmod 777 StopContainerImg.sh
 ./StopContainerImg.sh apkcontainer quakeguobiao/blogcoreapi
 
 docker build -t quakeguobiao/blogcoreapi .
+docker push quakeguobiao/blogcoreapi:latest
 docker run --name=apkcontainer -d -v /home/blogcore/appsettings.json:/app/appsettings.json -v /home/blogcore/Log/:/app/Log -v /etc/localtime:/etc/localtime -it -p 9291:9291 quakeguobiao/blogcoreapi
