@@ -9,9 +9,9 @@ cd bin/Debug/net6.0/publish/
 #rm -f appsettings.json
 #cp -rf /var/jenkins_home/workspace/SecurityConfig/Blog.Core/appsettings.json appsettings.json
 
-#docker stop apkcontainer
-#docker rm apkcontainer
-#docker rmi laozhangisphi/apkimg
+docker stop apkcontainer
+docker rm apkcontainer
+docker rmi quakeguobiao/blogcoreapi 
 
 chmod 777 StopContainerImg.sh
 ./StopContainerImg.sh apkcontainer quakeguobiao/blogcoreapi
